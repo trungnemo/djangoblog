@@ -53,6 +53,32 @@ Add the home.html to
 </body>
 </html>
 ```
+## Post Model for DB
+Declare the Post class in the models.py for the Post table in the DB
+```python
+from django.db import models
+from django.contrib.auth.models import User
+
+#Post class for the post table in the db
+class Post(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.ForeignKey(User, on_delete = models.CASCADE)
+    body = models.TextField()
+
+    def __str__(self):
+        return self.title + '|' + self.author
+
+#register the Post in the Django admin dashboard,in the admin.py of blog
+from django.contrib import admin
+from .models import Post 
+# Register your models here.
+admin.site.register(Post)
+```
+After define the model, then migrate the Class into the DB
+```bash
+python manage.py makemigrations
+```
+
 ## Contributing
 By [TrungVan](https://www.facebook.com/trungnemo)
 ## License
