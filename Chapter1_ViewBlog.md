@@ -193,6 +193,15 @@ Apply the base into the home.html
 </ul>
 {% endblock %}
 ```
+## Adding one more variable into the Postclass in the models.py
+```python
+title_tag = models.CharField(max_length=255,default="")
+```
+Then make migrate to the DB
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
 
 ## Contributing
 By [TrungVan](https://www.facebook.com/trungnemo)
