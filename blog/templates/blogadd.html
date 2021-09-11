@@ -7,9 +7,21 @@
 <!--Title page-->
 {% block content%}
 <h1 class="mt-5 text-center">Add a new Post</h1>
-<!--Django Form to add a new post-->
+<!-- Version of Django Form no Bootstrap
+
 <form method="POST">
   {% csrf_token %} {{ form.as_p }}
   <button class="btn btn-primary">Submit</button>
 </form>
+
+end of first version -->
+
+<!--Customized form with bootstrap-->
+<div class="form-group">
+  <form method="POST">
+    {% csrf_token %} {{ form.as_p }}
+    <button class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
 {% endblock%}
