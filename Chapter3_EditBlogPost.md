@@ -74,7 +74,30 @@ We add a link in a home page that contains a post list , a link will go to edit 
 {% endblock %}
 ```
 
+## Upgrade by using the Customized form, by add the BlogEditForm, to the forms.py
+```python
+class PostEditForm(forms.ModelForm):
+    # Class to holde the infor for the Form: Model, Model Fields
+    class Meta:
+        model = Post 
+        fields = ('title', 'title_tag', 'body')
+        # dictionary to specify the kind of html input types for each fields
+        widgets = {
+            #from.[TextInput, Select, Textarea are the form input types]
+            # attrs={'class':'form-control'}: is the html class style sheet from bootstrap
+            'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Blog Title'}),
+            'title_tag': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Blog Tag'}),
+            'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'})
+        }
+#Then edit the view
+class BlogEditView(UpdateView):
+    model = Post
+    template_name = 'blogedit.html'
+    #Rem the fields of we use the Custom form
+    #fields = ['title', 'title_tag', 'body']
+    form_class = PostEditForm
 
+```
 
 ## Contributing
 By [TrungVan](https://www.facebook.com/trungnemo)
