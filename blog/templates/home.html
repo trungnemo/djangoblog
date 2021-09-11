@@ -1,4 +1,11 @@
-<h1>Posts</h1>
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>Block Home Page</title>
+{% endblock%}
+<!--Content Page-->
+{% block content %}
+<h1 class="mt-5 text-center">Posts</h1>
 <ul>
   {% for post in object_list %}
   <li>
@@ -8,3 +15,4 @@
   </li>
   {% endfor %}
 </ul>
+{% endblock %}

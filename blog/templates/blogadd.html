@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>Post Add</title>
+{% endblock%}
+
+<!--Title page-->
+{% block content%}
+<h1 class="mt-5 text-center">Add a new Post</h1>
+<!--Django Form to add a new post-->
+<form method="POST">
+  {% csrf_token %} {{ form.as_p }}
+  <button class="btn btn-primary">Submit</button>
+</form>
+{% endblock%}
