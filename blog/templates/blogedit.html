@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+<!--Title-->
+{% block title%}
+<title>Blog Edit Page</title>
+{% endblock %}
+<!-- Content-->
+{% block content%}
+<div class="container">
+  <h3 class="mt-5 text-center">Edit a post</h3>
+  <form method="POST">
+    {% csrf_token %} {{ form.as_p }}
+    <button class="btn btn-secondary">Submit</button>
+  </form>
+</div>
+{% endblock %}

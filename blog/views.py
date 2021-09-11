@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Post
 #Use the customized form
-from .forms import PostForm
+from .forms import PostForm, PostEditForm
 # #Home 1
 # def home(request):
 #     return render(request, 'home.html', {})
@@ -32,4 +32,12 @@ class BlogAddView(CreateView):
     #and remove the fields = (cause the PostForm take care all of the fields)
     form_class = PostForm 
     template_name = 'blogadd.html'
-    
+
+# To Update a post
+class BlogEditView(UpdateView):
+    model = Post
+    template_name = 'blogedit.html'
+    #Rem the fields of we use the Custom form
+    #fields = ['title', 'title_tag', 'body']
+    form_class = PostEditForm
+
