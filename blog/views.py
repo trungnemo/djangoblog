@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 #Use the customized form
 from .forms import PostForm, PostEditForm
+from django.urls import reverse_lazy
 # #Home 1
 # def home(request):
 #     return render(request, 'home.html', {})
@@ -41,3 +42,11 @@ class BlogEditView(UpdateView):
     #fields = ['title', 'title_tag', 'body']
     form_class = PostEditForm
 
+# To Delete a post
+class BlogDeleteView(DeleteView):
+    model = Post
+    template_name = 'blogdelete.html'
+    # After a post is deleted, it will be redrected to home page, 
+    # Delete use this method, nos as BlogEditView with get_absolute_url in the models
+    success_url = reverse_lazy('home')
+   

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+<!--Title-->
+{% block title %}
+<title>Delete a Post</title>
+{% endblock %}
+
+<!--Content-->
+{% block content %}
+<h1 class="mt-5 text-center">Delete a Post</h1>
+<h3 class="mt-5 text-center">{{ post.title }}</h3>
+<br />
+<div class="form-group">
+  <form method="POST">
+    {% csrf_token %}
+    <!--Confirmation button : Later can be raplace by a model -->
+    <strong>Are you sure, to delete this post!?</strong>
+    <button class="btn btn-danger">Delete it</button>
+  </form>
+</div>
+
+{% endblock %}
