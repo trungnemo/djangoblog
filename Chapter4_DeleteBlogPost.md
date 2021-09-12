@@ -90,7 +90,16 @@ Add a delete link in the Blog post list in a home page
 </ul>
 {% endblock %}
 ```
-
+##Order a list by ID
+We add the ordering in the def home ..of views.py
+```python
+class HomeView(ListView):
+    model = Post
+    template_name = 'home.html'
+    # ordering = ['id']: id order 1,2,3...n
+    # ordering = ['-id']: id order n,..3,2,1
+    ordering = ['-id']
+```
 ## Contributing
 By [TrungVan](https://www.facebook.com/trungnemo)
 ## License
