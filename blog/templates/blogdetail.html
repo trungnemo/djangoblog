@@ -7,8 +7,9 @@
 <!--Title page-->
 {% block content%}
 <h1 class="mt-5 text-center">{{ post.title }}</h1>
-<small>By: {{ post.author.first_name }} {{ post.author.last_name }} </small
-><br />
+<small>By: {{ post.author.first_name }} {{ post.author.last_name }} </small>
+<small>Date: {{ post.post_date }}</small>
+<br />
 <hr />
 <br />
 {{ post.body }}

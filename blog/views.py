@@ -15,7 +15,8 @@ class HomeView(ListView):
     template_name = 'home.html'
     # ordering = ['id']: id order 1,2,3...n
     # ordering = ['-id']: id order n,..3,2,1
-    ordering = ['-id']
+    # ordering = ['-id']
+    ordering = ['-post_date']
 # Detail Post
 class BlogDetailView(DetailView):
     model = Post
