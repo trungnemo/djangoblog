@@ -32,7 +32,8 @@ We update the home.html in the templates folder
     post.author.first_name }} <br />
     <!-- {{ post.body }}-->
     <!-- just show first 200 chars of Body -->
-    {{ post.body | slice:":200" }}
+    <!-- We add |safe to tell django does not remove the html tag in the body text of the blog-->
+    {{ post.body | slice:":200" |safe}}
   </li>
   {% endfor %}
 </ul>
