@@ -7,7 +7,7 @@ What we do here
 
 ## Home page
 Home view will list all the posts in the databae, we use inherit the ListView so we do not care about the SELECT query to list all the post.
-
+- Note:  {{ post.body | slice:":200" }} for just show first 200 characters of the blog body
 We update the views.py as
 ```python
 #We use the Class View as follow
@@ -30,7 +30,9 @@ We update the home.html in the templates folder
   <li>
     <a href="{% url 'blogdetail' post.pk %}">{{ post.title }}</a> - {{
     post.author.first_name }} <br />
-    {{ post.body }}
+    <!-- {{ post.body }}-->
+    <!-- just show first 200 chars of Body -->
+    {{ post.body | slice:":200" }}
   </li>
   {% endfor %}
 </ul>
