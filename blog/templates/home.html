@@ -10,13 +10,21 @@
   {% for post in object_list %}
   <li>
     <a href="{% url 'blogdetail' post.pk %}">{{ post.title }}</a> -
+    <small>{{ post.category }}</small>
+    {% if user.is_authenticated and user.id == post.author.id %}
     <small><a href="{% url 'blogedit' post.pk %}">(Edit)</a></small> -
     <small><a href="{% url 'blogdelete' post.pk %}">(Delete)</a></small>
+    {% endif %}
     <br />
     {{post.author.first_name }} {{ post.author.last_name }}
     <small>{{ post.post_date }}</small>
     <br />
+    <!-- 
     {{ post.body }}
+    -->
+    <!-- just show first 200 chars of Body -->
+    <!-- We add |safe to tell django does not remove the html tag in the body text of the blog-->
+    {{ post.body | slice:":200" |safe}}
   </li>
   {% endfor %}
 </ul>

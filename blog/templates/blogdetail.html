@@ -12,7 +12,9 @@
 <br />
 <hr />
 <br />
-{{ post.body }}
+<!-- To keep the html tag in the body we add !safe -->
+<!-- |safe -->
+{{ post.body |safe }}
 <br />
 <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
 {% endblock%}

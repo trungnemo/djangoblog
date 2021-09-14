@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Category
 #Use the customized form
 from .forms import PostForm, PostEditForm
 from django.urls import reverse_lazy
@@ -53,4 +53,8 @@ class BlogDeleteView(DeleteView):
     # After a post is deleted, it will be redrected to home page, 
     # Delete use this method, nos as BlogEditView with get_absolute_url in the models
     success_url = reverse_lazy('home')
-   
+# Category views
+class CategoryAddView(CreateView):
+    model = Category
+    template_name = 'categoryadd.html'
+    fields = '__all__'

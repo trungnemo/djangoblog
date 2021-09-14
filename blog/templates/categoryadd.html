@@ -1,20 +1,12 @@
 {% extends 'base.html' %}
 <!--Title page-->
 {% block title%}
-<title>Post Add</title>
+<title>Add a new category</title>
 {% endblock%}
 
 <!--Title page-->
 {% block content%}
-<h1 class="mt-5 text-center">Add a new Post</h1>
-<!-- Version of Django Form no Bootstrap
-
-<form method="POST">
-  {% csrf_token %} {{ form.as_p }}
-  <button class="btn btn-primary">Submit</button>
-</form>
-
-end of first version -->
+<h1 class="mt-5 text-center">Add a new category</h1>
 
 {% if user.is_authenticated %}
 <!--Customized form with bootstrap-->
