@@ -34,7 +34,7 @@ admin.site.register(Category)
 #Then goto the http://127.0.0.1:8000/admin/blog/category/
 #Add some categories such as Programming, Sports, Movies
 ```
-## Add thecategory field of Post to the Blog Add, Edit form
+## Add category field of Post to the Blog Add, Edit form
 We hardcode to simulate ho the category data will be loaded into the Category select of the form.
 We use the variables choices, the data type is list of turple
 ```python
@@ -63,7 +63,7 @@ class PostForm(forms.ModelForm):
             'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'})
         }
 ```
-Now we get the category data from the category table
+Now we get the categories from DB 
 ```python
 from django import forms
 from .models import Post , Category
@@ -162,14 +162,82 @@ We add a link to the navagation.html to go to the categoryadd.html
         <li class="nav-item">
           <a class="nav-link" href="{% url 'categoryadd' %}">New Category</a>
         </li>
-        {% else %}
+ {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'register' %}">Register</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
-        {% endif %}
+ {% endif %}
+```
+## Filter posts by clicking on a Category in a home page
+We add a new view into a views.py, this time, we use the function view
+```python
+#CategoryPostsView: List all posts by category
+def CategoryPostsView(request, cats):
+    #cats is the paramters passed in for filter all posts  of category
+    category_posts = Post.objects.filter(category=cats)
+    return render(request, 'categoryposts.html', {'cats':cats,'category_posts':category_posts})
+```
+We add a new path into an urls.py
+```python
+from django.urls import path
+from . import views
+
+# urlpatterns = [
+#     path('', views.home, name = "home")
+# ]
+from .views import HomeView, BlogDetailView, BlogAddView, BlogEditView, BlogDeleteView,CategoryAddView
+urlpatterns = [
+    path('', HomeView.as_view(), name = "home"),
+    path('blog/<int:pk>', BlogDetailView.as_view(), name = "blogdetail"),
+    path('blogadd/', BlogAddView.as_view(), name = "blogadd"),
+    path('blogedit/<int:pk>', BlogEditView.as_view(), name = "blogedit"),
+    path('blogdelete/<int:pk>', BlogDeleteView.as_view(), name = "blogdelete"),
+    path('categoryadd/', CategoryAddView.as_view(), name = "categoryadd"),
+    #This path
+    path('categoryposts/<str:cats>/', CategoryPostsView.as_view(), name = "categoryposts"),
+]
+```
+We add a categoryposts.html into a templates
+```htmls
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>Posts by Category</title>
+{% endblock%}
+<!--Content Page-->
+{% block content %}
+<h1 class="mt-5 text-center">Posts of Category : {{ cats }}</h1>
+<ul>
+  {% for post in category_posts %}
+  <li>
+    <a href="{% url 'blogdetail' post.pk %}">{{ post.title }}</a> -
+    <small>{{ post.category }}</small>
+    {% if user.is_authenticated and user.id == post.author.id %}
+    <small><a href="{% url 'blogedit' post.pk %}">(Edit)</a></small> -
+    <small><a href="{% url 'blogdelete' post.pk %}">(Delete)</a></small>
+    {% endif %}
+    <br />
+    {{post.author.first_name }} {{ post.author.last_name }}
+    <small>{{ post.post_date }}</small>
+    <br />
+    <!-- 
+        {{ post.body }}
+        -->
+    <!-- just show first 200 chars of Body -->
+    <!-- We add |safe to tell django does not remove the html tag in the body text of the blog-->
+    {{ post.body | slice:":200" |safe}}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
+```
+Now we add a link to the category in the home page.
+So when click to the category we will go to the categoryposts.html
+```html
+small><a href="{% url 'categoryposts' post.category %}"> {{ post.category }}</a></small>
 ```
 
 ## Contributing
