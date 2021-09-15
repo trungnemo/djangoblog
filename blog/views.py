@@ -58,3 +58,8 @@ class CategoryAddView(CreateView):
     model = Category
     template_name = 'categoryadd.html'
     fields = '__all__'
+#CategoryPostsView: List all posts by category
+def CategoryPostsView(request, cats):
+    #cats is the paramters passed in for filter all posts  of category
+    category_posts = Post.objects.filter(category=cats)
+    return render(request, 'categoryposts.html', {'cats':cats,'category_posts':category_posts})

@@ -1,20 +1,16 @@
 {% extends 'base.html' %}
 <!--Title page-->
 {% block title%}
-<title>Block Home Page</title>
+<title>Posts by Category</title>
 {% endblock%}
 <!--Content Page-->
 {% block content %}
-<h1 class="mt-5 text-center">Posts</h1>
+<h1 class="mt-5 text-center">Posts of Category : {{ cats }}</h1>
 <ul>
-  {% for post in object_list %}
+  {% for post in category_posts %}
   <li>
     <a href="{% url 'blogdetail' post.pk %}">{{ post.title }}</a> -
-    <small
-      ><a href="{% url 'categoryposts' post.category %}">
-        {{ post.category }}</a
-      ></small
-    >
+    <small>{{ post.category }}</small>
     {% if user.is_authenticated and user.id == post.author.id %}
     <small><a href="{% url 'blogedit' post.pk %}">(Edit)</a></small> -
     <small><a href="{% url 'blogdelete' post.pk %}">(Delete)</a></small>
@@ -24,8 +20,8 @@
     <small>{{ post.post_date }}</small>
     <br />
     <!-- 
-    {{ post.body }}
-    -->
+        {{ post.body }}
+        -->
     <!-- just show first 200 chars of Body -->
     <!-- We add |safe to tell django does not remove the html tag in the body text of the blog-->
     {{ post.body | slice:":200" |safe}}
