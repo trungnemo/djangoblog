@@ -23,7 +23,8 @@ class PostForm(forms.ModelForm):
             # attrs={'class':'form-control'}: is the html class style sheet from bootstrap
             'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Blog Title'}),
             'title_tag': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Blog Tag'}),
-            'author': forms.Select(attrs={'class':'form-control'}),
+            #'author': forms.Select(attrs={'class':'form-control'}),
+            'author': forms.TextInput(attrs={'class':'form-control', 'value':'', 'id':'authorid', 'type':'hidden'}),
             # 'category': forms.Select(choices = choices, attrs={'class':'form-control'}),
             'category': forms.Select(choices = choice_list, attrs={'class':'form-control'}),
             'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'})

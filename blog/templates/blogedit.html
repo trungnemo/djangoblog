@@ -6,10 +6,14 @@
 <!-- Content-->
 {% block content%}
 <div class="container">
+  {% if user.is_authenticated and user.id == post.author.id %}
   <h3 class="mt-5 text-center">Edit a post</h3>
   <form method="POST">
     {% csrf_token %} {{ form.as_p }}
     <button class="btn btn-secondary">Submit</button>
   </form>
+  {% else %}
+  <p>Page not found 404</p>
+  {% endif %}
 </div>
 {% endblock %}

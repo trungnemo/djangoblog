@@ -24,8 +24,12 @@ end of first version -->
     <button class="btn btn-primary">Submit</button>
   </form>
 </div>
+
+<script>
+  var authorvalue = "{{ user.id }}";
+  document.getElementById("authorid").value = authorvalue;
+</script>
+
 {% else %}
 <p>You are not authiticated to go on more...!</p>
-{% endif %}
-
-{% endblock%}
+{% endif %} {% endblock%}

@@ -17,6 +17,14 @@ class HomeView(ListView):
     # ordering = ['-id']: id order n,..3,2,1
     # ordering = ['-id']
     ordering = ['-post_date']
+
+    # Add Category to navbar
+    def get_context_data(self, *args, **kwargs):
+        cat_menu = Category.objects.all()
+        context = super(HomeView, self).get_context_data(*args, **kwargs)
+        context["cat_menu"] = cat_menu
+        return context
+
 # Detail Post
 class BlogDetailView(DetailView):
     model = Post
@@ -63,3 +71,4 @@ def CategoryPostsView(request, cats):
     #cats is the paramters passed in for filter all posts  of category
     category_posts = Post.objects.filter(category=cats)
     return render(request, 'categoryposts.html', {'cats':cats,'category_posts':category_posts})
+
