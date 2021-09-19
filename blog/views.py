@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Category
 #Use the customized form
 from .forms import PostForm, PostEditForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
+from django.http import HttpResponseRedirect
 # #Home 1
 # def home(request):
 #     return render(request, 'home.html', {})
@@ -29,6 +30,19 @@ class HomeView(ListView):
 class BlogDetailView(DetailView):
     model = Post
     template_name = 'blogdetail.html'
+    
+     # Add Category to navbar
+    def get_context_data(self, *args, **kwargs):
+        cat_menu = Category.objects.all()
+        context = super(BlogDetailView, self).get_context_data(*args, **kwargs)
+        # Get the post and then get the like count for the post
+        stuff = get_object_or_404(Post, id = self.kwargs['pk'])
+        total_likes = stuff.total_likes()
+
+        context["cat_menu"] = cat_menu
+        context["total_likes"] = total_likes
+        return context
+
 # # Post Add to add a new post
 # class BlogAddView(CreateView):
 #     model = Post
@@ -66,9 +80,19 @@ class CategoryAddView(CreateView):
     model = Category
     template_name = 'categoryadd.html'
     fields = '__all__'
+
 #CategoryPostsView: List all posts by category
 def CategoryPostsView(request, cats):
     #cats is the paramters passed in for filter all posts  of category
     category_posts = Post.objects.filter(category=cats)
     return render(request, 'categoryposts.html', {'cats':cats,'category_posts':category_posts})
 
+#Like view
+def BlogPostLikeView(request, pk):
+    #like_post_id is the name of the button we add in the blogdetail.html
+    post = get_object_or_404(Post, id = request.POST.get('like_post_id'))
+    #Sabe the post likes, we do not save the post, we sabe post likes
+    post.likes.add(request.user)
+    #After likes, we stay on the same page: the Post page, so we do
+    # we redirect to the blogdetail with the id that we have in here the pk
+    return HttpResponseRedirect(reverse('blogdetail', args = [str(pk)]))
