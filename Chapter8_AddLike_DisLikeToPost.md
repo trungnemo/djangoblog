@@ -163,7 +163,111 @@ class BlogDetailView(DetailView):
     </button>
 </form>
 ```
+# Add UnLike to a Post
+- When a logon user already likes this post, the title button  will be Unlike, otherwize, title will be like
+- When click LIKE, app will add one more like, otherwise remove the like.
+ 
+So we start with the views.py
+## View for unlike
+```python
+#Like view
+def BlogPostLikeView(request, pk):
+    #like_post_id is the name of the button we add in the blogdetail.html
+    post = get_object_or_404(Post, id = request.POST.get('like_post_id'))
+    liked = False #request.user does not like the post yet, True already liked this post
+    #Adjust the rules: for LIKE and UNLIKE
+    if post.likes.filter(id = request.user.id).exists():
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    #After likes, we stay on the same page: the Post page, so we do
+    # we redirect to the blogdetail with the id that we have in here the pk
+    return HttpResponseRedirect(reverse('blogdetail', args = [str(pk)]))
 
+#the Detail view, add more context to specify LIKED or NOT LIKE yet
+
+# Detail Post
+class BlogDetailView(DetailView):
+    model = Post
+    template_name = 'blogdetail.html'
+    
+     # Add Category to navbar
+    def get_context_data(self, *args, **kwargs):
+        cat_menu = Category.objects.all()
+        context = super(BlogDetailView, self).get_context_data(*args, **kwargs)
+        # Get the post and then get the like count for the post
+        stuff = get_object_or_404(Post, id = self.kwargs['pk'])
+        total_likes = stuff.total_likes()
+         #the logon user Liked already yet
+        liked = False 
+        if stuff.likes.filter(id = self.request.user.id).exists():
+            liked = True
+         
+        context["cat_menu"] = cat_menu
+        context["total_likes"] = total_likes
+        context["liked"] = liked
+        return context
+```
+Now we update the blogdetail to reflect the like and unlike button 
+```html
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>{{ post.title_tag }}</title>
+{% endblock%}
+
+<!--Title page-->
+{% block content%}
+<h1 class="mt-5 text-center">{{ post.title }}</h1>
+<small>By: {{ post.author.first_name }} {{ post.author.last_name }} </small>
+<small>Date: {{ post.post_date }}</small>
+<br />
+<hr />
+<br />
+<!-- To keep the html tag in the body we add !safe -->
+<!-- |safe -->
+{{ post.body |safe }}
+<br />
+<a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+<!--Add the Form like_blogpost with the button like-->
+<br />
+<hr />
+<form action="{% url 'like_blogpost' post.pk %}" method="POST">
+  {% csrf_token %}
+  <!--Check if Like or Unlike based on the context liked-->
+  {% if user.is_authenticated %} {% if liked %}
+  <button
+    type="submit"
+    ,
+    name="like_post_id"
+    ,
+    value="{{ post.id }}"
+    ,
+    class="btn btn-danger btn-sm"
+  >
+    UnLike - ({{ total_likes }} Likes)
+  </button>
+  {% else %}
+  <button
+    type="submit"
+    ,
+    name="like_post_id"
+    ,
+    value="{{ post.id }}"
+    ,
+    class="btn btn-primary btn-sm"
+  >
+    Like
+  </button>
+  {% endif %} {% else %}
+  <a href="{% url 'login' %}">Login</a> to like {% endif%} - ({{ total_likes }}
+  Likes)
+</form>
+{% endblock%}
+
+```
 
 
 ## Contributing
