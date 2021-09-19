@@ -4,7 +4,7 @@ from .models import Post, Category
 #Use the customized form
 from .forms import PostForm, PostEditForm
 from django.urls import reverse_lazy,reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 # #Home 1
 # def home(request):
 #     return render(request, 'home.html', {})
@@ -38,9 +38,14 @@ class BlogDetailView(DetailView):
         # Get the post and then get the like count for the post
         stuff = get_object_or_404(Post, id = self.kwargs['pk'])
         total_likes = stuff.total_likes()
-
+         #the logon user Liked already yet
+        liked = False 
+        if stuff.likes.filter(id = self.request.user.id).exists():
+            liked = True
+         
         context["cat_menu"] = cat_menu
         context["total_likes"] = total_likes
+        context["liked"] = liked
         return context
 
 # # Post Add to add a new post
@@ -91,8 +96,14 @@ def CategoryPostsView(request, cats):
 def BlogPostLikeView(request, pk):
     #like_post_id is the name of the button we add in the blogdetail.html
     post = get_object_or_404(Post, id = request.POST.get('like_post_id'))
-    #Sabe the post likes, we do not save the post, we sabe post likes
-    post.likes.add(request.user)
+    liked = False #request.user does not like the post yet, True already liked this post
+    #Adjust the rules: for LIKE and UNLIKE
+    if post.likes.filter(id = request.user.id).exists():
+        post.likes.remove(request.user)
+        liked = False #Removed then not LIKE yet
+    else:
+        post.likes.add(request.user)
+        liked = True # Add then already LIKED
     #After likes, we stay on the same page: the Post page, so we do
     # we redirect to the blogdetail with the id that we have in here the pk
     return HttpResponseRedirect(reverse('blogdetail', args = [str(pk)]))
