@@ -174,7 +174,69 @@ end of first version -->
 
 {% endblock%}
 ```
+# Add new fields to the user registration form
+- In the new user registration form, we have user name and password, now we want to add more fields like First Name, Last Name, Email... to the registration form.
+## Add a new form to the members app
+- We add a new file, named forms.py to members app
+```python
+from django.contrib.auth.forms import UserCreationForm 
+from django.contrib.auth.models import User 
+from django import forms 
 
+#Custome form for registragion
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField()
+    first_name = forms.CharField(max_length = 100)
+    last_name = forms.CharField(max_length = 100)
+
+    class Meta:
+        model = User 
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+```
+Now we modify the views.py of members to use the SignupForm
+```python
+from django.shortcuts import render
+from django.views import generic
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from .forms import SignUpForm
+# 1 User Registration
+class UserRegisterView(generic.CreateView):
+    #form_class = UserCreationForm
+    form_class = SignUpForm
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('login')
+
+```
+- Now let's improve the SignUpForm with bootstrap classes
+- We can go to doc.djangoproject.com to get more about the widget
+
+```python
+from django.contrib.auth.forms import UserCreationForm 
+from django.contrib.auth.models import User 
+from django import forms
+from django.forms.widgets import EmailInput 
+
+#Custome form for registragion
+class SignUpForm(UserCreationForm):
+    #email = forms.EmailField()
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Email'}))
+    #first_name = forms.CharField(max_length = 100)
+    first_name = forms.CharField(max_length = 100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}))
+    #last_name = forms.CharField(max_length = 100)
+    last_name = forms.CharField(max_length = 100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
+
+    class Meta:
+        model = User 
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        super(SignUpForm, self).__init__(*args, **kwargs)
+        # Overwrite the attribute of username, password
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['password1'].widget.attrs['class'] = 'form-control'
+        self.fields['password2'].widget.attrs['class'] = 'form-control'
+```
 
 ## Contributing
 By [TrungVan](https://www.facebook.com/trungnemo)
