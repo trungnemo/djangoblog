@@ -16,7 +16,7 @@ class PostForm(forms.ModelForm):
     # Class to holde the infor for the Form: Model, Model Fields
     class Meta:
         model = Post 
-        fields = ('title', 'title_tag', 'author', 'category','body')
+        fields = ('title', 'title_tag', 'author', 'category','body', 'snippet')
         # dictionary to specify the kind of html input types for each fields
         widgets = {
             #from.[TextInput, Select, Textarea are the form input types]
@@ -27,14 +27,15 @@ class PostForm(forms.ModelForm):
             'author': forms.TextInput(attrs={'class':'form-control', 'value':'', 'id':'authorid', 'type':'hidden'}),
             # 'category': forms.Select(choices = choices, attrs={'class':'form-control'}),
             'category': forms.Select(choices = choice_list, attrs={'class':'form-control'}),
-            'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'})
+            'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'}),
+            'snippet': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Post snippet'})
         }
 
 class PostEditForm(forms.ModelForm):
     # Class to holde the infor for the Form: Model, Model Fields
     class Meta:
         model = Post 
-        fields = ('title', 'title_tag', 'category', 'body')
+        fields = ('title', 'title_tag', 'category', 'body','snippet')
         # dictionary to specify the kind of html input types for each fields
         widgets = {
             #from.[TextInput, Select, Textarea are the form input types]
@@ -42,5 +43,6 @@ class PostEditForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Blog Title'}),
             'title_tag': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Blog Tag'}),
             'category': forms.Select(choices = choices, attrs={'class':'form-control'}),
-            'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'})
+            'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'}),
+            'snippet': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Post snippet'})
         }

@@ -26,9 +26,10 @@
     <!-- 
     {{ post.body }}
     -->
+    {{ post.snippet }}
     <!-- just show first 200 chars of Body -->
     <!-- We add |safe to tell django does not remove the html tag in the body text of the blog-->
-    {{ post.body | slice:":200" |safe}}
+    <!-- {{ post.body | slice:":200" |safe}} -->
   </li>
   {% endfor %}
 </ul>

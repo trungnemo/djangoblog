@@ -24,6 +24,7 @@ class Post(models.Model):
     body = RichTextField(blank = True, null = True)
     post_date = models.DateField(auto_now_add = True)
     category = models.CharField(max_length=255, default="None")
+    snippet = models.CharField(max_length=255, default="Click link above to read full text")
     #ManyToMany Likes relations ships
     likes = models.ManyToManyField(User, related_name="users_like_posts")
 
