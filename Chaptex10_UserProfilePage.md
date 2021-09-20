@@ -108,6 +108,122 @@ class UserEditView(generic.UpdateView):
     def get_object(self):
         return self.request.user
 ```
+## Change Password
+- We add a new path in the urls.py of members. The path of django auth views
+- This is simple way, but users will go to the django admin view
+```python
+from django.urls import path 
+from .views import UserRegisterView, UserEditView
+from django.contrib.auth import views as auth_views
+#members views/urls here
+urlpatterns = [
+    path('register/',UserRegisterView.as_view(), name = 'register'),
+    path('profile/',UserEditView.as_view(), name = 'editprofile'),
+    path('password/',auth_views.PasswordChangeView.as_view(), name = 'changepassword'),
+]
+```
+- We will use our custom page to change password
+- We will add a new page, the changepassword.html in the templates\registration\
+```html
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>Change Password</title>
+{% endblock%}
+
+<!--Title page-->
+{% block content%}
+<h1 class="mt-5 text-center">Change Password</h1>
+<!--Customized form with bootstrap-->
+<div class="form-group">
+  <form method="POST">
+    {% csrf_token %} {{ form.as_p }}
+    <button class="btn btn-primary">Change Password</button>
+  </form>
+</div>
+
+{% endblock%}
+```
+- Then we adjust the urls.py 
+```python
+from django.urls import path 
+from .views import UserRegisterView, UserEditView,BlogAppPasswordChangeView
+from django.contrib.auth import views as auth_views
+#members views/urls here
+urlpatterns = [
+    path('register/',UserRegisterView.as_view(), name = 'register'),
+    path('profile/',UserEditView.as_view(), name = 'editprofile'),
+    #path('password/',auth_views.PasswordChangeView.as_view(), name = 'changepassword'),
+    #path('password/',auth_views.PasswordChangeView.as_view(template_name = 'registration\changepassword.html'), name = 'changepassword'),
+    path('password/',BlogAppPasswordChangeView.as_view(template_name = 'registration\changepassword.html'), name = 'changepassword'),
+]
+```
+## Change Password if OK then show an inform page
+- If we want to show the page that inform the user has changed the password successfully, we we add a new template and  view
+```html
+<!-- passwordchangedsuccess.html -->
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>Password updated</title>
+{% endblock%}
+
+<!--Title page-->
+{% block content%}
+<h1 class="mt-5 text-center">Password changed successfully</h1>
+{% endblock%}
+
+```
+we add a def view to use this template
+```python
+#3 Change password
+class BlogAppPasswordChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    # success_url = reverse_lazy('home')
+    success_url = reverse_lazy('passwordchangedsuccess')
+
+#4 Password sucess
+def PasswordChangedSuccessView(request):
+    return render(request, 'registration/passwordchangedsuccess.html', {})
+```
+We update the paths for urls.py
+```python
+from django.urls import path 
+from .views import UserRegisterView, UserEditView,BlogAppPasswordChangeView, PasswordChangedSuccessView
+from django.contrib.auth import views as auth_views
+#members views/urls here
+urlpatterns = [
+    path('register/',UserRegisterView.as_view(), name = 'register'),
+    path('profile/',UserEditView.as_view(), name = 'editprofile'),
+    #path('password/',auth_views.PasswordChangeView.as_view(), name = 'changepassword'),
+    #path('password/',auth_views.PasswordChangeView.as_view(template_name = 'registration\changepassword.html'), name = 'changepassword'),
+    path('password/',BlogAppPasswordChangeView.as_view(template_name = 'registration\changepassword.html'), name = 'changepassword'),
+    path('password/changed_success',PasswordChangedSuccessView, name = 'passwordchangedsuccess'),
+]
+```
+## Add bootstrap for the Change Password
+- We add a BlogPasswordChangeForm for that. To know which field names for the widget , you can view the html source of the PasswordChangeForm
+```python
+#Custome form for registragion
+class BlogPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(max_length = 100, widget=forms.PasswordInput(attrs={'class':'form-control', 'type':'password'}))
+    new_password1 = forms.CharField(max_length = 100, widget=forms.PasswordInput(attrs={'class':'form-control','type':'password'}))
+    new_password2= forms.CharField(max_length = 100, widget=forms.PasswordInput(attrs={'class':'form-control','type':'password'}))
+
+    class Meta:
+        model = User 
+        fields = ('old_password', 'new_password1', 'new_password2')
+```
+We will use this form for the view BlogAppPasswordChangeView
+```python
+#3 Change password
+class BlogAppPasswordChangeView(PasswordChangeView):
+    #form_class = PasswordChangeForm
+    form_class = BlogPasswordChangeForm
+    # success_url = reverse_lazy('home')
+    success_url = reverse_lazy('passwordchangedsuccess')
+```
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
