@@ -27,6 +27,8 @@ class Post(models.Model):
     snippet = models.CharField(max_length=255, default="Click link above to read full text")
     #ManyToMany Likes relations ships
     likes = models.ManyToManyField(User, related_name="users_like_posts")
+    #image field
+    header_image = models.ImageField(null = True, blank = True, upload_to = "images/")
 
     def total_likes(self):
         # return how many users likes (records in the table blogpost_likes for this post id only)
@@ -36,5 +38,5 @@ class Post(models.Model):
         return self.title + '|' + str(self.author)
 
     def get_absolute_url(self):
-        return reverse('blogdetail', args=(str(self.id)))
-        # return reverse('home')
+        #return reverse('blogdetail', args=(str(self.id)))
+        return reverse('home')

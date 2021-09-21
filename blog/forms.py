@@ -16,7 +16,7 @@ class PostForm(forms.ModelForm):
     # Class to holde the infor for the Form: Model, Model Fields
     class Meta:
         model = Post 
-        fields = ('title', 'title_tag', 'author', 'category','body', 'snippet')
+        fields = ('title', 'title_tag', 'author', 'category','body', 'snippet','header_image')
         # dictionary to specify the kind of html input types for each fields
         widgets = {
             #from.[TextInput, Select, Textarea are the form input types]
