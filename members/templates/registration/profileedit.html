@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 <!--Title page-->
 {% block title%}
-<title>Profile </title>
+<title>Profile</title>
 {% endblock%}
 
 <!--Title page-->
 {% block content%}
 <h1 class="mt-5 text-center">Profile</h1>
+<br />
+{{ user.profile.bio }}
+<br />
+<hr />
 <!--Customized form with bootstrap-->
 <div class="form-group">
   <form method="POST">
