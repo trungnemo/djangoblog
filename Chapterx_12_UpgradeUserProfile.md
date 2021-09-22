@@ -3,7 +3,7 @@
 - Add new model name Profile
 
 
-## model.py
+## Add a bio text for the user Profile
 We add a new model named Profile in the blog\models.py
 ```python
 # User Profile model
@@ -53,6 +53,67 @@ admin.site.register(Profile)
 </div>
 
 {% endblock%}
+```
+## Add a profile pic and social links
+- Start with the Profile model
+```python
+#Add this code to the class Profile in the models.py
+    profile_pic = models.ImageField(null = True, blank = True, upload_to = "images/profiles/")
+    #Add more
+    website_url = models.CharField(max_length=255, null = True, blank = True)
+    facebook_url = models.CharField(max_length=255, null = True, blank = True)
+    twitter_url = models.CharField(max_length=255, null = True, blank = True)
+    instagram_url = models.CharField(max_length=255, null = True, blank = True)
+    pinterest_url = models.CharField(max_length=255, null = True, blank = True)
+```
+- Now run migrate
+```bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+#goto admin dashboard to update the urls for a user
+```
+- We add these links to the blogdetail.html
+- We go to the https://getbootstrap.com/docs/5.1/components/card/ ...then copy the Horizontal card 
+```html
+<!--User Profile img and links for the post-->
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-4">
+      {% if post.author.profile.profile_pic %}
+      <img
+        src=" {{ post.author.profile.profile_pic.url }}"
+        width="200"
+        height="200"
+      />
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ post.author.first_name}} - {{ post.author.last_name}}
+        </h5>
+        <p class="text-muted">
+          {% if post.author.profile.website_url %}
+          <a href="{{ post.author.profile.website_url }}"> Website </a>| 
+          {% endif %} 
+          {% if post.author.profile.facebook_url %}
+          <a href="{{ post.author.profile.facebook_url }}"> Facebook </a>| 
+          {% endif %} 
+          {% if post.author.profile.twitter_url %}
+          <a href="{{ post.author.profile.twitter_url }}"> Twitter </a>| 
+          {% endif %} 
+          
+          {% if post.author.profile.instagram_url %}
+          <a href="{{ post.author.profile.instagram_url }}"> Instagram </a>| 
+          {% endif %}
+
+        </p>
+        <p class="card-text">{{ post.author.profile.bio }}</p>
+      </div>
+    </div>
+  </div>
+</div>
 ```
 
 ## Contributing
