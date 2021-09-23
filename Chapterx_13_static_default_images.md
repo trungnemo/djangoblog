@@ -1,6 +1,10 @@
 # Default static profile image if not valid img url
 
 - If user has not profile image then we load the default image in the STATIC instead
+- Notes: 
+
+django version before 3.1.0 , the setttings.py  there is an import os
+but from after 3.1.0, no import os. So to avoid the error, we just add import os
 
 ## Put a default profile image into the static
 We create a default a folder named static at the root of the project folder
