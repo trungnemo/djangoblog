@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!--Title page-->
+{% block title%}
+<title>User Profile</title>
+{% endblock%}
+
+<!--Title page-->
+{% block content%}
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+        {% if user_profile.profile_pic  %}
+            <img src="{{ user_profile.profile_pic.url }}" width="50"  height="50" class="rounded-circle" />
+        {% else %} 
+            <img src="{% static 'images/default_pic.png' %}" width="50"  height="50" class="rounded-circle" />
+        {% endif %} 
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{ user_profile }}</h5>
+        {% if user_profile.bio %}
+            <p class="card-text">{{ user_profile.bio }}</p>
+        {% endif %} 
+        <p class="text-muted">
+          {% if user_profile.website_url %}
+          <a href="{{ user_profile.website_url }}"> Website </a>| 
+          {% endif %} 
+          {% if user_profile.facebook_url %}
+          <a href="{{ user_profile.facebook_url }}"> Facebook </a>| 
+          {% endif %} 
+          {% if user_profile.twitter_url %}
+          <a href="{{ user_profile.twitter_url }}"> Twitter </a>| 
+          {% endif %} 
+          
+          {% if user_profile.instagram_url %}
+          <a href="{{ user_profile.instagram_url }}"> Instagram </a>| 
+          {% endif %}
+
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+
+{% endblock%}

@@ -20,7 +20,7 @@
     <small><a href="{% url 'blogdelete' post.pk %}">(Delete)</a></small>
     {% endif %}
     <br />
-    {{post.author.first_name }} {{ post.author.last_name }}
+    <a href="{% url 'user_profile' post.author.profile.id %}"> {{post.author.first_name }} {{ post.author.last_name }} </a> 
     <small>{{ post.post_date }}</small>
     <br />
     <!-- 

@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm, UserChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
+from blog.models import Profile
+
 from .forms import SignUpForm, EditProfileForm, BlogPasswordChangeForm
 
 # 1 User Registration
@@ -32,3 +35,19 @@ class BlogAppPasswordChangeView(PasswordChangeView):
 #4 Password sucess
 def PasswordChangedSuccessView(request):
     return render(request, 'registration/passwordchangedsuccess.html', {})
+
+#User extra profile
+class UserProfileShowView(DetailView):
+    model = Profile
+    template_name = 'registration/user_profile.html'
+
+     # Add Category to navbar
+    def get_context_data(self, *args, **kwargs):
+        # profiles = Profile.objects.all()
+        context = super(UserProfileShowView, self).get_context_data(*args, **kwargs)
+
+        user_profile = get_object_or_404(Profile, id = self.kwargs['pk'])
+        
+        context["user_profile"] = user_profile
+        return context
+
