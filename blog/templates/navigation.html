@@ -72,8 +72,9 @@
 
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'registraion_edit' %}">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Setting</a></li>
+            <li><a class="dropdown-item" href="{% url 'registraion_edit' %}">Logon Info</a></li>
+            <li><a class="dropdown-item" href="{% url 'user_profile' user.profile.id %}">Show Profile</a></li>
+             <li><a class="dropdown-item" href="{% url 'user_profile_edit' user.profile.id %}">Edit Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>

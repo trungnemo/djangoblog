@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>Profile Edit</title>
+{% endblock%}
+
+<!--Title page-->
+{% block content%}
+<h1 class="mt-5 text-center">Edit Profile</h1>
+
+{% if user.is_authenticated %}
+    {% if user.id == profile.user.id %}
+
+    <!--Customized form with bootstrap-->
+    <div class="form-group">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {{ form.media }} {{ form.as_p }}
+        <button class="btn btn-primary">Save</button>
+    </form>
+    </div>
+
+    {% else %}
+         <p>You coult not edit the profile of the other...!</p>
+    {% endif %}
+
+{% else %}
+    <p>You are not authiticated to go on more...!</p>
+{% endif %} 
+
+{% endblock%}

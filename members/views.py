@@ -1,3 +1,4 @@
+from django.forms import models
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic.detail import DetailView
@@ -19,7 +20,7 @@ class UserRegisterView(generic.CreateView):
 class UserEditView(generic.UpdateView):
     # form_class = UserChangeForm
     form_class = EditProfileForm
-    template_name = 'registration/profileedit.html'
+    template_name = 'registration/registraion_edit.html'
     success_url = reverse_lazy('home')
 
     def get_object(self):
@@ -51,3 +52,10 @@ class UserProfileShowView(DetailView):
         context["user_profile"] = user_profile
         return context
 
+
+#User extra profile
+class UserProfileEditView(generic.UpdateView):
+    model = Profile
+    template_name = 'registration/user_profile_edit.html'
+    fields = ['bio', 'profile_pic', 'website_url','facebook_url','twitter_url','instagram_url','pinterest_url']
+    success_url = reverse_lazy('home')
