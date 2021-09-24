@@ -100,6 +100,103 @@ urlpatterns = [
 
 ```
 
+## Edit User Profile
+- Add a new UserProfileEditView  into the views.py
+- Note for the {% if user.id == profile.user.id %}
+```python
+#User extra profile
+class UserProfileEditView(generic.UpdateView):
+    model = Profile
+    template_name = 'registration/user_profile_edit.html'
+    fields = ['bio', 'profile_pic', 'website_url','facebook_url','twitter_url','instagram_url','pinterest_url']
+    success_url = reverse_lazy('home')
+```
+- Add a html to the members\templates\registration\user_profile_edit.html
+```html
+{% extends 'base.html' %}
+<!--Title page-->
+{% block title%}
+<title>Profile Edit</title>
+{% endblock%}
+
+<!--Title page-->
+{% block content%}
+<h1 class="mt-5 text-center">Edit Profile</h1>
+
+{% if user.is_authenticated %}
+    {% if user.id == profile.user.id %}
+
+    <!--Customized form with bootstrap-->
+    <div class="form-group">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {{ form.media }} {{ form.as_p }}
+        <button class="btn btn-primary">Save</button>
+    </form>
+    </div>
+
+    {% else %}
+         <p>You coult not edit the profile of the other...!</p>
+    {% endif %}
+
+{% else %}
+    <p>You are not authiticated to go on more...!</p>
+{% endif %} 
+
+{% endblock%}
+
+```
+
+- Add a new page for UserProfileEditView  in the urls.py
+```python
+from django.urls import path 
+from .views import UserRegisterView, UserEditView,BlogAppPasswordChangeView, PasswordChangedSuccessView, UserProfileShowView,UserProfileEditView
+from django.contrib.auth import views as auth_views
+#members views/urls here
+urlpatterns = [
+   #...,
+    path('user_profile/<int:pk>',UserProfileShowView.as_view(), name = 'user_profile'),
+    path('user_profile_edit/<int:pk>',UserProfileEditView.as_view(), name = 'user_profile_edit'),
+    
+]
+```
+- Now we add the links to go to Show, Edit Profile Pages in the navigation.html
+```html
+ {% if user.is_authenticated %}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <!--
+            <img src="https://i.pravatar.cc/50" class="rounded-circle" />
+            -->
+            {% if user.profile.profile_pic  %}
+              <img src="{{ user.profile.profile_pic.url }}" width="50"  height="50" class="rounded-circle" />
+            {% else %} 
+              <img src="{% static 'images/default_pic.png' %}" width="50"  height="50" class="rounded-circle" />
+            {% endif %} 
+            {{ user.username }}
+
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'registraion_edit' %}">Logon Info</a></li>
+            <li><a class="dropdown-item" href="{% url 'user_profile' user.profile.id %}">Show Profile</a></li>
+             <li><a class="dropdown-item" href="{% url 'user_profile_edit' user.profile.id %}">Edit Profile</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+```
+
 ## Contributing
 [TrungNEMO](https://www.facebook.com/TrungNEMO)
 
