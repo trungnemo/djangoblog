@@ -1,4 +1,4 @@
-# Add , Edit and View User Profile
+# Create , Edit and View User Profile
 
 Uptonow, we use the django dashboard admin to add, edit the Profile, now we do to add the following functionalities to maintain Profile
 - Add
@@ -161,40 +161,24 @@ urlpatterns = [
 ```
 - Now we add the links to go to Show, Edit Profile Pages in the navigation.html
 ```html
- {% if user.is_authenticated %}
-      <ul class="navbar-nav">
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="navbarDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <!--
-            <img src="https://i.pravatar.cc/50" class="rounded-circle" />
-            -->
-            {% if user.profile.profile_pic  %}
-              <img src="{{ user.profile.profile_pic.url }}" width="50"  height="50" class="rounded-circle" />
-            {% else %} 
-              <img src="{% static 'images/default_pic.png' %}" width="50"  height="50" class="rounded-circle" />
-            {% endif %} 
-            {{ user.username }}
-
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+ <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="{% url 'registraion_edit' %}">Logon Info</a></li>
+      {% if user.profile.id  %}
             <li><a class="dropdown-item" href="{% url 'user_profile' user.profile.id %}">Show Profile</a></li>
-             <li><a class="dropdown-item" href="{% url 'user_profile_edit' user.profile.id %}">Edit Profile</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      {% endif %}
+            <li><a class="dropdown-item" href="{% url 'user_profile_edit' user.profile.id %}">Edit Profile</a></li>
+     {% else %}
+            <li><a class="dropdown-item" href="#">Create Profile</a></li>
+     {% end if %}
+     <li><hr class="dropdown-divider" /></li>
+     <li>
+     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a> </li>
+            
+  </ul>
+```
+## Create or Add a User Profile
+-..
+- ..
+```python
 ```
 
 ## Contributing
