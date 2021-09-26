@@ -163,17 +163,17 @@ urlpatterns = [
 ```html
  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="{% url 'registraion_edit' %}">Logon Info</a></li>
-      {% if user.profile.id  %}
+            {% if user.profile.id  %}
             <li><a class="dropdown-item" href="{% url 'user_profile' user.profile.id %}">Show Profile</a></li>
             <li><a class="dropdown-item" href="{% url 'user_profile_edit' user.profile.id %}">Edit Profile</a></li>
-     {% else %}
-            <li><a class="dropdown-item" href="#">Create Profile</a></li>
-     {% end if %}
-     <li><hr class="dropdown-divider" /></li>
-     <li>
-     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a> </li>
-            
-  </ul>
+            {% else %}
+            <li><a class="dropdown-item" href="{% url 'user_profile_create' %}">Create Profile</a></li>
+            {% endif %}
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </li>
+</ul>
 ```
 ## Create or Add a User Profile
 -..
