@@ -54,3 +54,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+class Comment(models.Model):
+    #The relation: many comment for one post , one a post is delete then all comments for that posts will be deleted too
+    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
+    #The name of user who did make comment on the post
+    name = models.CharField(max_length=255)
+    body = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '%s - %s' % (self.post.title, self.name)
+

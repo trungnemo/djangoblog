@@ -65,6 +65,7 @@
 
 <br />
 <hr />
+<!--Likes-->
 <form action="{% url 'like_blogpost' post.pk %}" method="POST">
   {% csrf_token %}
   <!--Check if Like or Unlike based on the context liked-->
@@ -96,4 +97,21 @@
   <a href="{% url 'login' %}">Login</a> to like {% endif%} - ({{ total_likes }}
   Likes)
 </form>
+<!--Comments-->
+<br/>
+<hr/>
+<h2>Comments</h2>
+<br/>
+{% if not post.comments.all %}
+  <p>No comments...! <a href="">Add Comments</a></p>
+{% else %}
+  {% for comment in post.comments.all %}
+    <strong>{{ comment.name }}</strong>
+    <br/>
+    {{ comment.body }}
+    <br/>
+    <br/>
+  {% endfor %}
+{% endif %}
+
 {% endblock%}
