@@ -59,3 +59,15 @@ class UserProfileEditView(generic.UpdateView):
     template_name = 'registration/user_profile_edit.html'
     fields = ['bio', 'profile_pic', 'website_url','facebook_url','twitter_url','instagram_url','pinterest_url']
     success_url = reverse_lazy('home')
+
+
+
+#Create User extra profile
+class UserProfileCreateView(generic.CreateView):
+    model = Profile
+    template_name = 'registration/user_profile_create.html'
+    fields = '__all__'
+    success_url = reverse_lazy('home')
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
