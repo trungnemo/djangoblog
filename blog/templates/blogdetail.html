@@ -102,10 +102,9 @@
 <hr/>
 <h2>Comments</h2>
 <br/>
-{% if not post.comments.all %}
-  <p>No comments...! <a href="">Add Comments</a></p>
-{% else %}
-  {% for comment in post.comments.all %}
+<a href="{% url 'addcomment' post.pk %}">Add Comments</a></p>
+{% if post.comments.all %}
+   {% for comment in post.comments.all %}
     <strong>{{ comment.name }}</strong>
     <br/>
     {{ comment.body }}

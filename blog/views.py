@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Category
+from .models import Comment, Post, Category
 #Use the customized form
-from .forms import PostForm, PostEditForm
+from .forms import CommentAddForm, PostForm, PostEditForm
 from django.urls import reverse_lazy,reverse
 from django.http import HttpResponseRedirect, request
 # #Home 1
@@ -107,3 +107,25 @@ def BlogPostLikeView(request, pk):
     #After likes, we stay on the same page: the Post page, so we do
     # we redirect to the blogdetail with the id that we have in here the pk
     return HttpResponseRedirect(reverse('blogdetail', args = [str(pk)]))
+
+# Comment Views
+#CommentAddView_Noform
+# class CommentAddView(CreateView):
+#     model = Comment
+#     template_name = 'comment_add.html'
+#     fields = '__all__'
+#     success_url = reverse_lazy('home')
+
+# CommentAddView With Form
+class CommentAddView(CreateView):
+    model = Comment
+    template_name = 'comment_add.html'
+    #fields = '__all__'
+    form_class = CommentAddForm
+
+    def form_valid(self, form):
+        #We can run CommentAddView noform then go to developer view, to get this field
+        form.instance.post_id = self.kwargs['pk']
+        return super().form_valid(form)
+    
+    success_url = reverse_lazy('home')

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post , Category
+from .models import Post , Category, Comment
 
 #Temp data to simulate the category select form control
 #We define the data type list of turple
@@ -46,3 +46,18 @@ class PostEditForm(forms.ModelForm):
             'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'}),
             'snippet': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Post snippet'})
         }
+
+
+
+class CommentAddForm(forms.ModelForm):
+    # Class to holde the infor for the Form: Model, Model Fields
+    class Meta:
+        model = Comment 
+        fields = ('name', 'body')
+        # dictionary to specify the kind of html input types for each fields
+        widgets = {
+            #from.[TextInput, Select, Textarea are the form input types]
+            # attrs={'class':'form-control'}: is the html class style sheet from bootstrap
+            'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'User name '}),
+            'body': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Blog Body for long text'}),
+         }
